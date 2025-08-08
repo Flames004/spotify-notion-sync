@@ -68,7 +68,7 @@ Your Notion database will contain the following properties:
 
 ### **1. Clone & Install**
 ```bash
-git clone https://github.com/yourusername/spotify-notion-sync.git
+git clone https://github.com/Flames004/spotify-notion-sync.git
 cd spotify-notion-sync
 npm install
 ```
@@ -237,12 +237,6 @@ npm test
 
 ---
 
-## **📝 License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## **⚠️ Troubleshooting**
 
 ### **Common Issues**
@@ -265,39 +259,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ```
 **Solution:** The app handles this automatically with retries. If persistent, reduce sync frequency.
 
-### **Getting Help**
-- 📚 Check the [Issues](https://github.com/yourusername/spotify-notion-sync/issues) page
-- 💬 Join our [Discord Community](https://discord.gg/your-invite)
-- 📧 Email: support@yourdomain.com
-
----
-
 ## **📸 Screenshots**
 
 ### **Notion Database View**
-![Notion Database](./docs/notion-database.png)
+![Notion Database](./assets/notion-db.png)
 
 ### **Terminal Output**
-![Terminal Sync](./docs/terminal-output.png)
+![Terminal Sync](./assets/terminal.png)
 
 ### **Spotify Integration**
-![Spotify Auth](./docs/spotify-auth.png)
+![Spotify Auth](./assets/auth.png)
 
 ---
-
-## **🙏 Acknowledgments**
-
-- **Spotify** for their excellent Web API
-- **Notion** for the powerful database API
-- **Node.js Community** for amazing packages
-- **Contributors** who helped improve this project
-
----
-
-<div align="center">
-
-**⭐ Star this repo if it helped you organize your music data! ⭐**
-
-[Report Bug](https://github.com/yourusername/spotify-notion-sync/issues) • [Request Feature](https://github.com/yourusername/spotify-notion-sync/issues) • [Documentation](https://github.com/yourusername/spotify-notion-sync/wiki)
-
-</div>

@@ -44,20 +44,42 @@ async function getTopTracks() {
     spotifyUrl: track.external_urls.spotify,
     releaseDate: track.album.release_date,
     duration: formatDuration(track.duration_ms),
-    albumImageUrl: track.album.images[0]?.url || null, // Optional: album cover
+    popularity: track.popularity,
+    albumImageUrl: track.album.images[0]?.url || null,
+    explicit: track.explicit,
+    previewUrl: track.preview_url,
+    trackNumber: track.track_number,
+    totalTracks: track.album.total_tracks,
+    durationMs: track.duration_ms,
+    isrc: track.external_ids?.isrc || null,
+    markets: track.available_markets?.length || 0
   }));
 }
 
 async function addToNotion(tracks) {
+  let successCount = 0;
+  let errorCount = 0;
+
   for (const track of tracks) {
     try {
-      // Create the properties object with new fields
+      // Create the properties object with all available fields
       const properties = {
         Title: { title: [{ text: { content: track.name } }] },
         Artist: { rich_text: [{ text: { content: track.artist } }] },
         Album: { rich_text: [{ text: { content: track.album } }] },
         "Spotify URL": { url: track.spotifyUrl },
+        Duration: { rich_text: [{ text: { content: track.duration } }] },
+        Popularity: { number: track.popularity },
       };
+
+      // Add optional fields only if they exist
+      if (track.releaseDate) {
+        properties["Release Date"] = { date: { start: track.releaseDate } };
+      }
+
+      if (track.albumImageUrl) {
+        properties["Album Cover"] = { url: track.albumImageUrl };
+      }
 
       await axios.post(
         "https://api.notion.com/v1/pages",
@@ -73,18 +95,29 @@ async function addToNotion(tracks) {
           },
         }
       );
-      console.log(`✅ Added: ${track.name} by ${track.artist}`);
+      console.log(`✅ Added: ${track.name} by ${track.artist} (Popularity: ${track.popularity})`);
+      successCount++;
     } catch (error) {
       console.error(`❌ Error adding ${track.name}:`, error.response?.data || error.message);
+      errorCount++;
     }
   }
+
+  return { successCount, errorCount };
 }
 
 (async () => {
   try {
+    console.log("🎵 Starting Spotify → Notion sync...");
     const tracks = await getTopTracks();
     console.log(`📊 Found ${tracks.length} top tracks`);
-    await addToNotion(tracks);
+    
+    const results = await addToNotion(tracks);
+    
+    console.log("\n🎯 Sync Summary:");
+    console.log(`✅ Successfully synced: ${results.successCount} tracks`);
+    console.log(`❌ Failed to sync: ${results.errorCount} tracks`);
+    console.log(`📈 Success rate: ${((results.successCount / tracks.length) * 100).toFixed(1)}%`);
     console.log("🎵 Sync completed!");
   } catch (error) {
     console.error("❌ Sync failed:", error.message);
